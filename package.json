@@ -10,9 +10,16 @@
     "format": "biome format --write"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.11.2",
+    "i18next": "^25.8.14",
+    "lucide-react": "^0.577.0",
     "next": "16.1.6",
+    "next-i18next": "^15.4.3",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "react-i18next": "^16.5.5",
+    "react-redux": "^9.2.0",
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.0",

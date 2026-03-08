@@ -1,26 +1,155 @@
 @import "tailwindcss";
 
+/* Retro palette - cliente: #2C140A, #2E261B, #2A1E12 + acento terracota */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --retro-dark: #2C140A;
+  --retro-warm: #2E261B;
+  --retro-deep: #2A1E12;
+  --retro-cream: #F5EDE4;
+  --retro-paper: #E8DFD4;
+  --retro-beige: #E5DED3;
+  --retro-accent: #B8956B;
+  --retro-gold: #C9A962;
+  --retro-terracota: #cc835e;
+  --retro-rust: #B85C32;
+  --background: var(--retro-warm);
+  --foreground: var(--retro-cream);
+  --muted: var(--retro-paper);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-retro-dark: #2C140A;
+  --color-retro-warm: #2E261B;
+  --color-retro-deep: #2A1E12;
+  --color-retro-black: #0D0905;
+  --color-retro-cream: #F5EDE4;
+  --color-retro-paper: #E8DFD4;
+  --color-retro-beige: #E5DED3;
+  --color-retro-terracota: #C86B3D;
+  --color-retro-rust: #B85C32;
+  --color-retro-gold: #C9A962;
+  --color-retro-accent: #B8956B;
+  --font-sans: var(--font-dm-sans);
+  --font-serif: var(--font-playfair);
+  --font-body: var(--font-cormorant);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    scrollbar-width: none;
+  }
+  *::-webkit-scrollbar {
+    display: none;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-body), Georgia, serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: var(--retro-gold);
+    transition: color 0.2s ease;
+  }
+  a:hover {
+    color: var(--retro-cream);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ─── Home animated background ─────────────────────────────── */
+@layer components {
+  .home-bg-root {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .home-bg-base {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      var(--retro-dark) 0%,
+      var(--retro-warm) 35%,
+      var(--retro-deep) 50%,
+      #5c3d2e 75%,
+      #8b5a3c 100%
+    );
+    background-size: 300% 300%;
+    animation: bg-gradient-shift 28s ease infinite;
+  }
+
+  .home-bg-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+  }
+
+  .home-bg-orb-1 {
+    width: 75vw;
+    height: 75vw;
+    top: -15%;
+    right: -20%;
+    background: radial-gradient(circle, rgba(200, 107, 61, 0.17) 0%, transparent 65%);
+    animation: orb-drift-1 24s ease-in-out infinite;
+  }
+
+  .home-bg-orb-2 {
+    width: 55vw;
+    height: 55vw;
+    bottom: 15%;
+    left: -18%;
+    background: radial-gradient(circle, rgba(139, 90, 60, 0.2) 0%, transparent 65%);
+    animation: orb-drift-2 31s ease-in-out infinite;
+  }
+
+  .home-bg-orb-3 {
+    width: 45vw;
+    height: 45vw;
+    top: 42%;
+    left: 28%;
+    background: radial-gradient(circle, rgba(92, 61, 46, 0.13) 0%, transparent 60%);
+    animation: orb-drift-3 19s ease-in-out infinite;
+  }
 }
+
+@keyframes bg-gradient-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes orb-drift-1 {
+  0%,  100% { transform: translate(0%,  0%)  scale(1); }
+  30%        { transform: translate(4%,  8%)  scale(1.06); }
+  70%        { transform: translate(-3%, 4%)  scale(0.95); }
+}
+
+@keyframes orb-drift-2 {
+  0%,  100% { transform: translate(0%,  0%)  scale(1); }
+  40%        { transform: translate(6%, -5%)  scale(1.08); }
+  75%        { transform: translate(-4%, 7%)  scale(0.93); }
+}
+
+@keyframes orb-drift-3 {
+  0%,  100% { transform: translate(0%,  0%)  scale(1); }
+  25%        { transform: translate(-5%, 4%)  scale(1.04); }
+  60%        { transform: translate(4%, -6%)  scale(0.97); }
+}
+
+/* Retro paper texture overlay (opcional, muy sutil) */
+.retro-grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+

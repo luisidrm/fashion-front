@@ -1,0 +1,6 @@
+export { Hero } from './Hero'
+export { TheCollection } from './TheCollection'
+export { OurStory } from './OurStory'
+export { Newsletter } from './Newsletter'
+export { OffersBanner } from './OffersBanner'
+export { FeaturedProducts } from './FeaturedProducts'
