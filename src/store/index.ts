@@ -5,9 +5,11 @@ import {
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for webs
 import cartReducer from '../app/(main)/cart/_slices/cartSlice'
+import authReducer from '../app/(main)/account/_slice/authSlice'
 
 const rootReducer = combineReducers({
   cart: cartReducer,
+  auth: authReducer,
   // other slices...
 })
 

@@ -7,6 +7,7 @@ import {
   Newsletter,
 } from '@/components/home'
 import { HomeBackground } from '@/components/home/HomeBackground'
+import Footer from '@/components/layout/Footer'
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
       <OurStory />
       <OffersBanner />
       <Newsletter />
+      <Footer />
     </div>
   )
 }

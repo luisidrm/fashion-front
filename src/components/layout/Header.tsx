@@ -2,18 +2,25 @@
 
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 const nav = [
   { href: '/shop', label: 'SHOP' },
   { href: '/cart', label: 'CART' },
   { href: '/contact', label: 'CONTACT' },
-  { href: '/account', label: 'ACCOUNT' },
 ]
 
 
 export default function Header() {
+  const pathname = usePathname()
+  const router = useRouter()
   const [open, setOpen] = useState(false);
+
+  const handleNavClick = (href: string) => {
+    setOpen(false);
+    router.push(href);
+  }
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-sepia-deep/80 backdrop-blur-md border-sepia-warm/10">
@@ -25,14 +32,20 @@ export default function Header() {
         {/* Desktop */}
         <div className="hidden md:flex items-center gap-10">
           {nav.map((item) => (
-            <a
+            <Link
               key={item.label}
               href={`${item.href}`}
               className="font-body text-sepia-warm/70 hover:text-cream uppercase tracking-widest text-md transition-colors"
             >
               {item.label}
-            </a>
+            </Link>
           ))}
+          {pathname !== "/account" && <button type="button"
+            onClick={() => router.push("/account")}
+            className="ml-6 px-4 py-2 border border-sepia-warm/30 text-sepia-warm/70 hover:text-cream uppercase tracking-widest text-sm transition-colors"
+          >
+            Iniciar Sesion
+          </button>}
         </div>
 
         {/* Mobile toggle */}
