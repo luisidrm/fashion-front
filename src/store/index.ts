@@ -1,42 +1,34 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit'
 import {
-  persistStore,
-  persistReducer,
+  persistStore, persistReducer,
   FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER,
 } from 'redux-persist'
-import counterReducer from './slices/counterSlice'
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for webs
+import cartReducer from '../app/(main)/cart/_slices/cartSlice'
 
 const rootReducer = combineReducers({
-  counter: counterReducer,
+  cart: cartReducer,
+  // other slices...
 })
 
-const makeStore = () => {
-  // Guard: only use localStorage on the client
-  const persistConfig = {
-    key: 'root',
-    storage: typeof window !== 'undefined'
-      ? require('redux-persist/lib/storage').default
-      : require('redux-persist/lib/storage/session').default,
-    whitelist: ['counter'],
-  }
-
-  const persistedReducer = persistReducer(persistConfig, rootReducer)
-
-  const store = configureStore({
-    reducer: persistedReducer,
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({
-        serializableCheck: {
-          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-        },
-      }),
-  })
-
-  const persistor = persistStore(store)
-  return { store, persistor }
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['cart'], // ← cart is persisted across sessions
 }
 
-export const { store, persistor } = makeStore()
+const persistedReducer = persistReducer(persistConfig, rootReducer)
 
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+})
+
+export const persistor = persistStore(store)
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch

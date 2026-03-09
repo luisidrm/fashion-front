@@ -23,7 +23,7 @@ const dmSans = DM_Sans({
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={`${playfair.variable} ${cormorant.variable} ${dmSans.variable}`}>
+    <html lang="en" className={`${playfair.variable} ${cormorant.variable} ${dmSans.variable}`}>
       <body className="retro-grain min-h-screen">
         <Providers>{children}</Providers>
       </body>
