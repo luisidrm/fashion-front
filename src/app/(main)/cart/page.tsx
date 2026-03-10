@@ -5,36 +5,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import { removeItem, updateQuantity } from './_slices/cartSlice'
 import { HomeBackground } from '../../../components/home/HomeBackground'
 import { Trash } from 'lucide-react'
-
-const MOCK_ITEMS = [
-  {
-    id: "1",
-    name: 'Linen Overshirt 1940s',
-    variant: 'Tostado / Washed',
-    size: 'M',
-    price: 89.0,
-    quantity: 1,
-    image: 'https://images.unsplash.com/photo-1578587018452-892bacefd3f2?w=300&q=80',
-  },
-  {
-    id: "2",
-    name: 'Corduroy Wide Trouser',
-    variant: 'Tierra / Vintage',
-    size: 'L',
-    price: 115.0,
-    quantity: 2,
-    image: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=300&q=80',
-  },
-  {
-    id: "3",
-    name: 'Raw Edge Knit Vest',
-    variant: 'Crema / Natural',
-    size: 'S',
-    price: 67.0,
-    quantity: 1,
-    image: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=300&q=80',
-  },
-]
+import Image from 'next/image'
 
 export default function CartPage() {
   const dispatch = useAppDispatch()
@@ -76,13 +47,13 @@ export default function CartPage() {
             Shopping Cart
           </h1>
           <p className="mt-2 font-(family-name:--font-dm-sans) text-sm text-(--retro-paper)/50">
-            {MOCK_ITEMS.length === 0
+            {items.length === 0
               ? 'Your cart is empty'
-              : `${MOCK_ITEMS.reduce((s, i) => s + i.quantity, 0)} pieces curated`}
+              : `${items.reduce((s, i) => s + i.quantity, 0)} pieces curated`}
           </p>
         </div>
 
-        {MOCK_ITEMS.length === 0 ? (
+        {items.length === 0 ? (
           /* Empty state */
           <div className="flex flex-col items-center justify-center py-32 text-center">
             <div className="mb-6 text-6xl opacity-20">◎</div>
@@ -104,17 +75,19 @@ export default function CartPage() {
 
             {/* Items */}
             <div className="flex flex-col gap-px">
-              {MOCK_ITEMS.map((item) => (
+              {items.map((item) => (
                 <div
                   key={`${item.id}-${item.size}`}
-                  className="group flex gap-5 border-b border-(--retro-cream)/8 py-7 transition-colors hover:bg-(--retro-cream)/2 sm:gap-7"
+                  className="group flex gap-5 border-b border-(--retro-cream)/8 py-7 px-7 transition-colors hover:bg-(--retro-cream)/2 sm:gap-7"
                 >
                   {/* Image */}
-                  <div className="relative h-32 w-24 shrink-0 overflow-hidden sm:h-40 sm:w-28">
-                    <img
-                      src={item.image}
+                  <div className="relative h-32 w-32 shrink-0 overflow-hidden sm:h-40 sm:w-28">
+                    <Image
+                      src={item.images[0]}
                       alt={item.name}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="h-full w-full object-center transition-transform duration-700 group-hover:scale-105 bg-transparent "
+                      height={300}
+                      width={300}
                     />
                     <div className="absolute inset-0 bg-(--retro-dark)/10" />
                   </div>
