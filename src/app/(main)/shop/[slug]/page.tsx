@@ -193,7 +193,7 @@ export default function ProductPage() {
       size: selectedSize,
       price: product.price,
       quantity,
-      image: product.image,
+      images: product.images,
     }))
     setAdded(true)
     setTimeout(() => setAdded(false), 2200)
