@@ -18,23 +18,7 @@ export default function CartPage() {
   return (
     <div className="relative min-h-screen">
       <HomeBackground />
-      <div className="retro-grain" />
-
-      {/* Nav */}
-      <nav className="relative z-20 flex items-center justify-between px-6 py-5 sm:px-10 lg:px-16">
-        <Link
-          href="/"
-          className="font-(family-name:--font-playfair) text-lg font-semibold tracking-wide text-(--retro-cream)"
-        >
-          VESTIA
-        </Link>
-        <Link
-          href="/shop"
-          className="font-(family-name:--font-dm-sans) text-[11px] uppercase tracking-[0.25em] text-(--retro-paper)/70 transition-colors hover:text-(--retro-cream)"
-        >
-          ← Continue shopping
-        </Link>
-      </nav>
+      <nav className="relative z-20 flex items-center justify-between px-6 py-5 sm:px-10 lg:px-16"/>
 
       <main className="relative z-10 mx-auto max-w-6xl px-4 pb-32 pt-8 sm:px-6 lg:px-8">
 
@@ -78,7 +62,7 @@ export default function CartPage() {
               {items.map((item) => (
                 <div
                   key={`${item.id}-${item.size}`}
-                  className="group flex gap-5 border-b border-(--retro-cream)/8 py-7 px-7 transition-colors hover:bg-(--retro-cream)/2 sm:gap-7"
+                  className="group flex gap-5 border-b border-(--retro-cream)/8 py-7 transition-colors hover:bg-(--retro-cream)/2 sm:gap-7"
                 >
                   {/* Image */}
                   <div className="relative h-32 w-32 shrink-0 overflow-hidden sm:h-40 sm:w-28 rounded-lg">

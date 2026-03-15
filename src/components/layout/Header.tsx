@@ -1,5 +1,6 @@
 "use client"
 
+import { useAppSelector } from '@/store/hooks';
 import { Menu, X } from 'lucide-react';
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation';
@@ -15,12 +16,17 @@ const nav = [
 export default function Header() {
   const pathname = usePathname()
   const router = useRouter()
+
+  const user = useAppSelector((state) => state.auth) || null;
+
   const [open, setOpen] = useState(false);
 
   const handleNavClick = (href: string) => {
     setOpen(false);
     router.push(href);
   }
+
+  const initial = user ? user.user?.name?.charAt(0).toUpperCase() : "?";
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-sepia-deep/80 backdrop-blur-md border-sepia-warm/10">
@@ -40,12 +46,21 @@ export default function Header() {
               {item.label}
             </Link>
           ))}
-          {pathname !== "/account" && <button type="button"
-            onClick={() => router.push("/account")}
-            className="ml-6 px-4 py-2 border border-sepia-warm/30 text-sepia-warm/70 hover:text-cream uppercase tracking-widest text-sm transition-colors"
-          >
-            Iniciar Sesion
-          </button>}
+          {pathname !== "/account" ? (
+            <button type="button"
+              onClick={() => router.push("/account")}
+              className="ml-6 px-4 py-2 border border-sepia-warm/30 text-sepia-warm/70 hover:text-cream uppercase tracking-widest text-sm transition-colors"
+            >
+              Iniciar Sesion
+            </button>
+          ) : (
+            <button type="button"
+              onClick={() => router.push("/account")}
+              className="ml-6 px-4 py-2 border border-sepia-warm/30 text-sepia-warm/70 hover:text-cream uppercase tracking-widest text-sm transition-colors"
+            >
+              <div className="w-9 h-9 min-w-9 rounded-[50%] bg-sepia-warm/70 text-white grid place-items-center font-semibold text-[0.82rem]">{initial}</div>
+            </button>
+          )}
         </div>
 
         {/* Mobile toggle */}
