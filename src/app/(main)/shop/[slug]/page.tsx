@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { useAppDispatch } from '@/store/hooks'
 import { addItem } from '../../cart/_slices/cartSlice'
 import { HomeBackground } from '../../../../components/home/HomeBackground'
+import Image from 'next/image'
 
 const ALL_PRODUCTS = [
   {
@@ -224,13 +225,15 @@ export default function ProductPage() {
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_480px] lg:gap-16 xl:gap-24">
 
           {/* ── Left: Images ── */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 h-[85%]">
             {/* Main image */}
-            <div className="relative aspect-[3/4] overflow-hidden bg-(--retro-deep)">
-              <img
+            <div className="relative aspect-3/4 overflow-hidden bg-(--retro-deep) rounded-lg ">
+              <Image
                 src={product.images[activeImage]}
                 alt={product.name}
                 className="h-full w-full object-cover brightness-90 saturate-75 transition-all duration-700"
+                width={600}
+                height={800}
               />
               <div className="absolute inset-0 bg-(--retro-dark)/10" />
               {/* Category badge */}
@@ -254,10 +257,12 @@ export default function ProductPage() {
                       : 'opacity-50 hover:opacity-80'
                   }`}
                 >
-                  <img
+                  <Image
                     src={img}
                     alt={`${product.name} ${i + 1}`}
                     className="h-full w-full object-cover brightness-90 saturate-75"
+                    width={200}
+                    height={200}
                   />
                 </button>
               ))}
@@ -281,7 +286,7 @@ export default function ProductPage() {
             </div>
 
             {/* Description */}
-            <p className="mt-7 font-(family-name:--font-body) text-base leading-7 text-(--retro-paper)/75">
+            <p className="mt-7 font-body text-base leading-7 text-(--retro-paper)/75">
               {product.description}
             </p>
 
@@ -305,7 +310,7 @@ export default function ProductPage() {
                     key={size}
                     type="button"
                     onClick={() => { setSelectedSize(size); setSizeError(false) }}
-                    className={`min-w-[48px] border px-4 py-2.5 font-(family-name:--font-dm-sans) text-xs uppercase tracking-[0.15em] transition-all duration-200 ${
+                    className={`min-w-12 border px-4 py-2.5 font-(family-name:--font-dm-sans) text-xs uppercase tracking-[0.15em] transition-all duration-200 ${
                       selectedSize === size
                         ? 'border-(--retro-terracota) bg-(--retro-terracota) text-white'
                         : sizeError
@@ -401,7 +406,7 @@ export default function ProductPage() {
                     ))}
                   </ul>
                 ) : (
-                  <p className="font-(family-name:--font-body) text-sm leading-7 text-(--retro-paper)/65">
+                  <p className="font-body text-sm leading-7 text-(--retro-paper)/65">
                     {product.care}
                   </p>
                 )}

@@ -167,13 +167,13 @@ const ALL_PRODUCTS = [
 const CATEGORIES = ['ALL', 'OUTERWEAR', 'TOPS', 'BOTTOMS', 'KNITWEAR', 'FOOTWEAR', 'ACCESSORIES']
 const SORT_OPTIONS = ['Featured', 'Price: Low to High', 'Price: High to Low']
 
-type QuickAddState = { 
-  slug: string; 
-  size: string, 
-  price: number, 
-  images: string[], 
-  name: string, 
-  category: string 
+type QuickAddState = {
+  slug: string;
+  size: string,
+  price: number,
+  images: string[],
+  name: string,
+  category: string
   quantity: 1
 } | null
 
@@ -244,8 +244,8 @@ export default function ShopPage() {
                 type="button"
                 onClick={() => setActiveCategory(cat)}
                 className={`px-4 py-1.5 font-(family-name:--font-dm-sans) text-[10px] uppercase tracking-[0.25em] transition-colors ${activeCategory === cat
-                    ? 'bg-(--retro-terracota) text-white'
-                    : 'border border-(--retro-cream)/20 text-(--retro-paper)/50 hover:border-(--retro-cream)/50 hover:text-(--retro-cream)'
+                  ? 'bg-(--retro-terracota) text-white'
+                  : 'border border-(--retro-cream)/20 text-(--retro-paper)/50 hover:border-(--retro-cream)/50 hover:text-(--retro-cream)'
                   }`}
               >
                 {cat}
@@ -265,8 +265,8 @@ export default function ShopPage() {
                   type="button"
                   onClick={() => setSortBy(opt)}
                   className={`px-3 py-1.5 font-(family-name:--font-dm-sans) text-[10px] uppercase tracking-[0.15em] transition-colors ${sortBy === opt
-                      ? 'text-(--retro-gold)'
-                      : 'text-(--retro-paper)/35 hover:text-(--retro-paper)/70'
+                    ? 'text-(--retro-gold)'
+                    : 'text-(--retro-paper)/35 hover:text-(--retro-paper)/70'
                     }`}
                 >
                   {opt}
@@ -279,10 +279,10 @@ export default function ShopPage() {
         {/* Product grid */}
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {filtered.map((product) => (
-            <div key={product.slug} className="group cursor-pointer">
+            <div key={product.slug} role='button' onClick={() => router.push(`/shop/${product.slug}?params=${product.slug}`)} className="group cursor-pointer">
 
               {/* Image */}
-              <div className="relative mb-5 aspect-square overflow-hidden bg-(--retro-deep)">
+              <div className="relative mb-5 aspect-square overflow-hidden bg-(--retro-deep) rounded-lg">
                 <Image
                   src={product.images[0]}
                   alt={product.name}
@@ -291,6 +291,7 @@ export default function ShopPage() {
                   width={300}
                   height={300}
                 />
+
                 <div className="absolute inset-0 bg-(--retro-black)/0 transition-colors duration-500 group-hover:bg-(--retro-black)/40" />
 
                 {/* Added confirmation */}
@@ -336,7 +337,7 @@ export default function ShopPage() {
                       <div className="flex gap-2">
                         <button
                           type="button"
-                          onClick={() => setQuickAdd({ slug: product.slug, size: '',category:product.category, price: product.price, images: product.images, name: product.name, quantity: 1 })}
+                          onClick={() => setQuickAdd({ slug: product.slug, size: '', category: product.category, price: product.price, images: product.images, name: product.name, quantity: 1 })}
                           className="flex-1 bg-(--retro-dark)/95 border border-(--retro-gold)/60 px-3 py-3 font-(family-name:--font-dm-sans) text-[10px] uppercase tracking-[0.2em] text-(--retro-gold) transition-colors hover:bg-(--retro-gold) hover:text-(--retro-dark)"
                         >
                           Quick Add
