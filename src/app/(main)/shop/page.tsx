@@ -277,7 +277,7 @@ export default function ShopPage() {
         </div>
 
         {/* Product grid */}
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {filtered.map((product) => (
             <div key={product.slug} role='button' onClick={() => router.push(`/shop/${product.slug}?params=${product.slug}`)} className="group cursor-pointer">
 

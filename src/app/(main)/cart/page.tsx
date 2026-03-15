@@ -81,7 +81,7 @@ export default function CartPage() {
                   className="group flex gap-5 border-b border-(--retro-cream)/8 py-7 px-7 transition-colors hover:bg-(--retro-cream)/2 sm:gap-7"
                 >
                   {/* Image */}
-                  <div className="relative h-32 w-32 shrink-0 overflow-hidden sm:h-40 sm:w-28">
+                  <div className="relative h-32 w-32 shrink-0 overflow-hidden sm:h-40 sm:w-28 rounded-lg">
                     <Image
                       src={item.images[0]}
                       alt={item.name}
