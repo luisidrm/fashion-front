@@ -6,17 +6,24 @@ import {
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for webs
 import cartReducer from '../app/(main)/cart/_slices/cartSlice'
 import authReducer from '../app/(main)/account/_slice/authSlice'
+import { authApi } from '../app/(main)/account/_service/authApi'
+import { shopApi } from '@/app/(main)/shop/_service/shopApi'
+import { categoriesApi } from '../app/(main)/admin/categories/_service/categoriesApi'
+import { offersApi } from '../app/(main)/admin/offers/_service/offersApi'
 
 const rootReducer = combineReducers({
   cart: cartReducer,
   auth: authReducer,
-  // other slices...
+  [authApi.reducerPath]: authApi.reducer,
+  [shopApi.reducerPath]: shopApi.reducer,
+  [categoriesApi.reducerPath]: categoriesApi.reducer,
+  [offersApi.reducerPath]: offersApi.reducer,
 })
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['cart'], // ← cart is persisted across sessions
+  whitelist: ['cart', 'auth'], // ← cart and auth are persisted across sessions
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
@@ -28,7 +35,10 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }),
+    }).concat(authApi.middleware)
+    .concat(shopApi.middleware)
+    .concat(categoriesApi.middleware)
+    .concat(offersApi.middleware),
 })
 
 export const persistor = persistStore(store)

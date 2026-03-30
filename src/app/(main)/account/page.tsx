@@ -5,21 +5,32 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { login, logout } from "./_slice/authSlice";
 import { HomeBackground } from "@/components/home/HomeBackground";
 import Link from "next/link";
+import { useLoginMutation, useLogoutMutation, useRegisterMutation } from "./_service/authApi";
+import { useRouter } from "next/navigation";
+import { setAuthCookiesClient, clearAuthCookiesClient } from "@/lib/auth-cookies-client";
 
 interface AuthFormState {
   name: string;
   email: string;
   password: string;
   addressLine1: string;
+  addressLine2: string;
   city: string;
+  state: string;
   country: string;
+  zipCode: string;
 }
 
 type Mode = "login" | "register";
 
 export default function AccountPage() {
+  const router = useRouter()
   const dispatch = useAppDispatch();
   const auth = useAppSelector((state) => state.auth);
+
+  const [loginRequest] = useLoginMutation()
+  const [registerRequest] = useRegisterMutation()
+  const [logoutRequest] = useLogoutMutation()
 
   const [mode, setMode] = useState<Mode>("login");
   const [form, setForm] = useState<AuthFormState>({
@@ -27,37 +38,54 @@ export default function AccountPage() {
     email: "",
     password: "",
     addressLine1: "",
+    addressLine2: "",
     city: "",
+    state: "",
     country: "",
+    zipCode: ""
   });
+
+  console.log(auth)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
     if (!form.email.trim()) return;
-    dispatch(
-      login({
-        name: form.name || "Invitado",
-        email: form.email,
-        addressLine1: form.addressLine1,
-        addressLine2: "",
-        city: form.city,
-        state: "",
-        zipCode: "",
-        country: form.country,
+    if (mode === "login") {
+      await loginRequest({ email: form.email, password: form.password }).unwrap().then(res => {
+        dispatch(login({
+          user: res.user,
+          token: res.token
+        }))
+        setAuthCookiesClient(res.token, res.user.isAdmin)
+        if(res.user.isAdmin){
+          router.push("/admin")
+        }
       })
-    );
+
+    }
+    if (mode === "register") {
+      await registerRequest(form).unwrap();
+      setMode("login")
+    }
   };
 
-  const handleLogout = () => dispatch(logout());
+  console.log("Auth state:", auth); // Debugging line to check auth state changes
+
+  const handleLogout = async() => {
+    await logoutRequest().unwrap().then(() => {
+      clearAuthCookiesClient()
+      dispatch(logout());
+    })
+  };
   const switchMode = (nextMode: Mode) => setMode(nextMode);
 
   // ── Authenticated view ──────────────────────────────────────────
-  if (auth.isAuthenticated && auth.user) {
+  if (auth.isAuthenticated === true && auth.user) {
     return (
       <div className="relative min-h-screen">
         <HomeBackground />
@@ -159,22 +187,20 @@ export default function AccountPage() {
               <button
                 type="button"
                 onClick={() => switchMode("login")}
-                className={`flex-1 rounded-full px-4 py-2 transition-all duration-200 ${
-                  mode === "login"
-                    ? "bg-(--retro-terracota) text-white shadow-md"
-                    : "text-(--retro-paper)/50 hover:text-(--retro-paper)/80"
-                }`}
+                className={`flex-1 rounded-full px-4 py-2 transition-all duration-200 ${mode === "login"
+                  ? "bg-(--retro-terracota) text-white shadow-md"
+                  : "text-(--retro-paper)/50 hover:text-(--retro-paper)/80"
+                  }`}
               >
                 Iniciar sesión
               </button>
               <button
                 type="button"
                 onClick={() => switchMode("register")}
-                className={`flex-1 rounded-full px-4 py-2 transition-all duration-200 ${
-                  mode === "register"
-                    ? "bg-(--retro-terracota) text-white shadow-md"
-                    : "text-(--retro-paper)/50 hover:text-(--retro-paper)/80"
-                }`}
+                className={`flex-1 rounded-full px-4 py-2 transition-all duration-200 ${mode === "register"
+                  ? "bg-(--retro-terracota) text-white shadow-md"
+                  : "text-(--retro-paper)/50 hover:text-(--retro-paper)/80"
+                  }`}
               >
                 Crear cuenta
               </button>
@@ -268,6 +294,17 @@ export default function AccountPage() {
                         className="mt-2 w-full border border-(--retro-paper)/20 bg-(--retro-dark)/70 px-4 py-3 font-(family-name:--font-dm-sans) text-sm text-(--retro-cream) placeholder:text-(--retro-paper)/30 focus:border-(--retro-terracota) focus:outline-none focus:ring-1 focus:ring-(--retro-terracota)/50 transition-colors"
                         placeholder="Ciudad"
                       />
+                      <label className="block font-(family-name:--font-dm-sans) text-[10px] uppercase tracking-[0.25em] text-(--retro-paper)/60">
+                        Estado
+                      </label>
+                      <input
+                        type="text"
+                        name="state"
+                        value={form.state}
+                        onChange={handleChange}
+                        className="mt-2 w-full border border-(--retro-paper)/20 bg-(--retro-dark)/70 px-4 py-3 font-(family-name:--font-dm-sans) text-sm text-(--retro-cream) placeholder:text-(--retro-paper)/30 focus:border-(--retro-terracota) focus:outline-none focus:ring-1 focus:ring-(--retro-terracota)/50 transition-colors"
+                        placeholder="Estado"
+                      />
                     </div>
                     <div>
                       <label className="block font-(family-name:--font-dm-sans) text-[10px] uppercase tracking-[0.25em] text-(--retro-paper)/60">
@@ -277,6 +314,19 @@ export default function AccountPage() {
                         type="text"
                         name="country"
                         value={form.country}
+                        onChange={handleChange}
+                        className="mt-2 w-full border border-(--retro-paper)/20 bg-(--retro-dark)/70 px-4 py-3 font-(family-name:--font-dm-sans) text-sm text-(--retro-cream) placeholder:text-(--retro-paper)/30 focus:border-(--retro-terracota) focus:outline-none focus:ring-1 focus:ring-(--retro-terracota)/50 transition-colors"
+                        placeholder="País"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-(family-name:--font-dm-sans) text-[10px] uppercase tracking-[0.25em] text-(--retro-paper)/60">
+                        Codigo Postal
+                      </label>
+                      <input
+                        type="text"
+                        name="zipCode"
+                        value={form.zipCode}
                         onChange={handleChange}
                         className="mt-2 w-full border border-(--retro-paper)/20 bg-(--retro-dark)/70 px-4 py-3 font-(family-name:--font-dm-sans) text-sm text-(--retro-cream) placeholder:text-(--retro-paper)/30 focus:border-(--retro-terracota) focus:outline-none focus:ring-1 focus:ring-(--retro-terracota)/50 transition-colors"
                         placeholder="País"
@@ -300,10 +350,6 @@ export default function AccountPage() {
                   ¿Olvidaste tu contraseña?
                 </p>
               )}
-
-              <p className="pt-1 text-center font-(family-name:--font-dm-sans) text-[10px] uppercase tracking-[0.2em] text-(--retro-paper)/30">
-                Sin backend aún — estado local del navegador
-              </p>
             </form>
           </div>
 
@@ -312,7 +358,7 @@ export default function AccountPage() {
             "La moda pasa, el estilo permanece."
           </p>
         </div>
-      </section>
-    </div>
+      </section >
+    </div >
   );
 }

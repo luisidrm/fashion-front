@@ -49,12 +49,12 @@ export function FeaturedProducts() {
                 className="group block overflow-hidden rounded-sm border border-(--retro-deep)/40 bg-(--retro-warm)/60 transition hover:border-(--retro-gold)/40"
               >
                 <div className="relative aspect-3/4 overflow-hidden bg-(--retro-deep)/30">
-                  <Image
-                    src={product.image}
+                  <img
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${product.image}`}
                     alt={product.name}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                     className="object-cover transition duration-300 group-hover:scale-105"
+                    width={300}
+                    height={300}
                   />
                 </div>
                 <div className="p-4">

@@ -66,8 +66,8 @@ export default function CartPage() {
                 >
                   {/* Image */}
                   <div className="relative h-32 w-32 shrink-0 overflow-hidden sm:h-40 sm:w-28 rounded-lg">
-                    <Image
-                      src={item.images[0]}
+                    <img
+                      src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${item.images[0].url}`}
                       alt={item.name}
                       className="h-full w-full object-center transition-transform duration-700 group-hover:scale-105 bg-transparent "
                       height={300}
@@ -83,9 +83,6 @@ export default function CartPage() {
                         <h3 className="font-(family-name:--font-playfair) text-lg font-medium text-(--retro-cream)">
                           {item.name}
                         </h3>
-                        <p className="mt-0.5 font-(family-name:--font-dm-sans) text-xs text-(--retro-paper)/50">
-                          {item.variant}
-                        </p>
                         <div className="mt-2 inline-flex items-center border border-(--retro-cream)/15 px-2 py-0.5">
                           <span className="font-(family-name:--font-dm-sans) text-[10px] uppercase tracking-[0.2em] text-(--retro-paper)/60">
                             Size {item.size}
@@ -130,11 +127,11 @@ export default function CartPage() {
 
                       <div className="text-right">
                         <p className="font-(family-name:--font-playfair) text-lg text-(--retro-cream)">
-                          €{(item.price * item.quantity).toFixed(2)}
+                          €{(item.price * item.quantity)}
                         </p>
                         {item.quantity > 1 && (
                           <p className="font-(family-name:--font-dm-sans) text-[11px] text-(--retro-paper)/40">
-                            €{item.price.toFixed(2)} each
+                            €{item.price} each
                           </p>
                         )}
                       </div>

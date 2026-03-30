@@ -1,13 +1,13 @@
 import { createSlice,type PayloadAction } from '@reduxjs/toolkit'
+import { ProductImages } from '@/components/admin/MultiImagePicker'
 
 export interface CartItem {
   id: string
   name: string
-  variant: string
   size: string
   price: number
   quantity: number
-  images: string[]
+  images: ProductImages[]
 }
 
 interface CartState {
